@@ -1,0 +1,21 @@
+<%- include header%>
+<form class='' method='post'>
+	<div class='form-group'>
+		<label for='username'>用户名：</label>
+		<input class='form-control' name='name' id='username' type='text'>
+	</div>
+	<div class='form-group'>
+		<label for='password'>密码</label>
+		<input class='form-control' name='password' id='password' type='password'>
+	</div>
+	<div class='form-group'>
+		<label for='confirm'>确认密码</label>
+		<input class='form-control' name='password-repeat' id='confirm' type='password'>
+	</div>
+	<div class='form-group'>
+		<label for='email'>注册邮箱</label>
+		<input class='form-control' name='email' id='email' type='email'>
+	</div>
+	<input type='submit' class='btn btn-primary' value="注册">
+</form>
+<%- include footer%>

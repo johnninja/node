@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Blog</title>
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+
+
+<div class="container">
+	<div class="row">
+		<nav class="col-md-3 list-group">
+			<span class = 'list-group-item'><a title="主页" href="/">home</a></span>
+			<% if (user) {%>
+				<span class = 'list-group-item'><a title="上传" href="/upload">上传</a></span>
+				<span class = 'list-group-item'><a title="发表" href="/post">发表</a></span>
+				<span class = 'list-group-item'><a title="登出" href="/logout">登出</a></span>
+			<% } else{%>
+				<span class = 'list-group-item'><a title="登录" href="/login">登录</a></span>
+				<span class = 'list-group-item'><a title="注册" href="/reg">注册</a></span>
+			<%}%>
+		</nav>
+
+		<article class="col-md-9">
+			<header class='page-header'>
+				<h1>主页</h1>
+			</header>

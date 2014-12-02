@@ -1,0 +1,12 @@
+<%- include header%>
+<p><h2><a href='/u/<%= post.name%>/<%= post.time.day%>/<%= post.title%>'></a></h2></p>
+<p>
+作者：<a href="/u/<%= post.name%>"><%= post.name%></a>|
+日期：<%= post.time.minute%>
+</p>
+<p>
+<a href="/edit/<%= post.name%>/<%= post.time.day%>/<%= post.title%>"></a>
+<a href="/remove/<%= post.name%>/<%= post.time.day%>/<%= post.title%>"></a>
+</p>
+<p><%- post.post%></p>
+<%- include footer%>
