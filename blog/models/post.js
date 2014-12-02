@@ -23,7 +23,8 @@ Post.prototype.save = function(callback){
 		name : this.name,
 		title : this.title,
 		time : time,
-		post : this.post
+		post : this.post,
+		comments:[]
 	}
 
 	mongodb.open(function(err,db){
@@ -47,7 +48,7 @@ Post.prototype.save = function(callback){
 		});
 	});
 }
-Post.getAll = function(name,callback){
+Post.getTen = function(name,page,callback){
 	mongodb.open(function(err,db){
 		if (err) {
 			return callback(err);
@@ -65,17 +66,22 @@ Post.getAll = function(name,callback){
 				query.name = name;
 			};
 
-			collection.find(query).sort({
-				time:-1
-			}).toArray(function(err,docs){
-				mongodb.close();
-				if (err) {
-					return callback(err);
-				};
-				docs.forEach(function(doc){
-					doc.post = markdown.toHTML(doc.post);
+			collection.count(query,function(err,total){
+				collection.find(query,{
+					skip:(page-1)*10,
+					limit:10
+				}).sort({
+					time:-1
+				}).toArray(function(err,docs){
+					mongodb.close();
+					if (err) {
+						return callback(err);
+					};
+					docs.forEach(function(doc){
+						doc.post = markdown.toHTML(doc.post);
+					});
+					callback(null,docs,total);
 				});
-				callback(null,docs);
 			});
 		});
 	});
@@ -103,7 +109,15 @@ Post.getOne = function(name,day,title,callback){
 					return callback(err);
 				};
 
-				doc.post = markdown.toHTML(doc.post);
+				if (doc) {
+					doc.post = markdown.toHTML(doc.post);
+					if (doc.comments) {
+						doc.comments.forEach(function(comment){
+							comment.content = markdown.toHTML(comment.content);
+						});
+					};
+				};
+				
 				callback(null,doc);
 			});
 		});
@@ -134,6 +148,62 @@ Post.edit = function(name,title,day,callback){
 				callback(null,doc);
 			});
 
+		});
+	});
+}
+Post.update = function(name ,day,title,post,callback){
+	mongodb.open(function(err,db){
+		if (err) {
+			return callback(err);
+		};
+
+		db.collection('posts',function(err,collection){
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			};
+
+			collection.update({
+				'name':name,
+				'time.day':day,
+				'title':title
+			},{
+				$set:{post:post}
+			},function(err){
+				mongodb.close();
+				if (err) {
+					return callback(err);
+				};
+				callback(null);
+			});
+		});
+	});
+}
+Post.remove = function(name,day,title,callback){
+	mongodb.open(function(err,db){
+		if (err) {
+			return callback(err);
+		};
+
+		db.collection('posts',function(err,collection){
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			};
+
+			collection.remove({
+				'name':name,
+				'time.day':day,
+				'title':title
+			},{
+				w:1
+			},function(err){
+				mongodb.close();
+				if (err) {
+					callback(err);
+				};
+				callback(null);
+			});
 		});
 	});
 }

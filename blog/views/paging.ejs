@@ -1,0 +1,10 @@
+<div>
+	<ul class="pagination">
+		<% if(!isFirstPage){ %>
+			<li><a href="?q=<%= page-1 %>">上一页</a></li>
+		<% } %>
+		<% if(!isLastPage){ %>
+			<li><a href="?q=<%= page+1 %>">下一页</a></li>
+		<% } %>
+	</ul>
+</div>
